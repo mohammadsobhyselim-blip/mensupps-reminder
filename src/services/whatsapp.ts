@@ -71,3 +71,16 @@ export async function sendCreatineReminder(phone: string, name: string) {
     { name: '3', value: '• الكرياتين\n💧 اشرب 3-4 لتر ماء اليوم' }
   ]);
 }
+
+export async function sendTextMessage(phone: string, message: string) {
+  try {
+    await axios.post(
+      `${WATI_BASE}/api/v1/sendSessionMessage/${phone}`,
+      { messageText: message },
+      { headers: headers() }
+    );
+    console.log(`✅ Sent text message to ${phone}`);
+  } catch (err: any) {
+    console.error(`❌ Failed to send text to ${phone}:`, err.response?.data || err.message);
+  }
+}
