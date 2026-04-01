@@ -1,4 +1,4 @@
-import express from 'express';
+بimport express from 'express';
 import dotenv from 'dotenv';
 dotenv.config();
 
@@ -7,7 +7,7 @@ import { handleOrderCreated } from './webhooks/shopify';
 const app = express();
 app.use(express.json());
 
-app.post('/webhooks/orders/created', handleOrderCreated);
+app.post('/webhooks/orders/fulfilled', handleOrderCreated);
 
 app.post('/webhooks/whatsapp', (req, res) => {
   const body = req.body;
