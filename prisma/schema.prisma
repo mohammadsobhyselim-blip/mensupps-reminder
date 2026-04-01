@@ -1,0 +1,76 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id          String   @id @default(cuid())
+  phone       String   @unique
+  name        String
+  wakeTime    String   @default("08:00")
+  sleepTime   String   @default("23:00")
+  workoutTime String?
+  fitnessGoal String?
+  optedIn     Boolean  @default(false)
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+
+  products  UserProduct[]
+  reminders Reminder[]
+  logs      MessageLog[]
+}
+
+model Product {
+  id             String  @id @default(cuid())
+  shopifyId      String  @unique
+  name           String
+  timingCategory String
+  servings       Int?
+  isCreatine     Boolean @default(false)
+
+  userProducts UserProduct[]
+}
+
+model UserProduct {
+  id                 String   @id @default(cuid())
+  userId             String
+  productId          String
+  purchaseDate       DateTime @default(now())
+  servings           Int
+  dailyUsage         Int      @default(1)
+  estimatedEndDate   DateTime
+  reorderTriggerDate DateTime
+  reorderSent        Boolean  @default(false)
+
+  user    User    @relation(fields: [userId], references: [id])
+  product Product @relation(fields: [productId], references: [id])
+}
+
+model Reminder {
+  id          String    @id @default(cuid())
+  userId      String
+  type        String
+  scheduledAt DateTime
+  sentAt      DateTime?
+  status      String    @default("PENDING")
+  message     String
+
+  user User @relation(fields: [userId], references: [id])
+}
+
+model MessageLog {
+  id             String   @id @default(cuid())
+  userId         String
+  message        String
+  direction      String
+  replyText      String?
+  reorderClicked Boolean  @default(false)
+  createdAt      DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id])
+}
