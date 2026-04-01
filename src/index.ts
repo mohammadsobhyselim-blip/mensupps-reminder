@@ -1,8 +1,9 @@
-بimport express from 'express';
+import express from 'express';
 import dotenv from 'dotenv';
 dotenv.config();
 
 import { handleOrderCreated } from './webhooks/shopify';
+import { startReminderWorker } from './workers/reminderWorker';
 
 const app = express();
 app.use(express.json());
@@ -22,4 +23,5 @@ app.get('/health', (_, res) => {
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`🚀 Mensupps running on port ${PORT}`);
+  startReminderWorker();
 });
