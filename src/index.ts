@@ -18,15 +18,11 @@ app.post('/webhooks/whatsapp', async (req, res) => {
   console.log('📱 WA incoming:', JSON.stringify(body, null, 2));
 
   try {
-    const message = body?.messages?.[0];
-    const contact = body?.contacts?.[0];
-
     if (
-      message?.type === 'interactive' &&
-      message?.interactive?.button_reply?.title === 'نعم للتفعيل' &&
-      contact?.wa_id
+      body?.buttonReply?.text === 'نعم للتفعيل' &&
+      body?.waId
     ) {
-      const phone = contact.wa_id;
+      const phone = '+' + body.waId;
 
       await prisma.user.update({
         where: { phone },
