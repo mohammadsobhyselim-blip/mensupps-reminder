@@ -13,9 +13,10 @@ async function sendTemplateMessage(
   templateName: string,
   parameters: { name: string; value: string }[]
 ) {
+  const cleanPhone = phone.replace(/^\+/, '');
   try {
     await axios.post(
-      `${WATI_BASE}/api/v1/sendTemplateMessage?whatsappNumber=${phone}`,
+      `${WATI_BASE}/api/v1/sendTemplateMessage?whatsappNumber=${cleanPhone}`,
       { template_name: templateName, broadcast_name: templateName, parameters },
       { headers: headers() }
     );
@@ -73,9 +74,10 @@ export async function sendCreatineReminder(phone: string, name: string) {
 }
 
 export async function sendTextMessage(phone: string, message: string) {
+  const cleanPhone = phone.replace(/^\+/, '');
   try {
     await axios.post(
-      `${WATI_BASE}/api/v1/sendSessionMessage/${phone}`,
+      `${WATI_BASE}/api/v1/sendSessionMessage/${cleanPhone}`,
       { messageText: message },
       { headers: headers() }
     );
