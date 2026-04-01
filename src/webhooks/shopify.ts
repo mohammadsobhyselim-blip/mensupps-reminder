@@ -22,7 +22,8 @@ export async function handleOrderCreated(req: Request, res: Response): Promise<v
   res.status(200).json({ ok: true });
 
   const order = req.body;
-  const phone = order.customer?.phone;
+  const rawPhone: string | undefined = order.customer?.phone;
+  const phone = rawPhone ? '+' + rawPhone.replace(/\D/g, '') : null;
   const name  = order.customer?.first_name || 'صديقي';
 
   if (!phone) {
